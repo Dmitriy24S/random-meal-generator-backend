@@ -3,6 +3,8 @@ import * as dotenv from 'dotenv'
 import express from 'express'
 import mongoose from 'mongoose'
 import UserController from './controllers/UserController.js'
+import handleValidationErrors from './validation/handleValidationErrors.js'
+import { registerValidation } from './validation/validations.js'
 
 dotenv.config()
 
@@ -27,9 +29,12 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 // User Registration
-app.post('/meal/auth/register', UserController.register)
-// TODO: registration validation:
-// app.post('/auth/register', registerValidation, handleValidationErrors, UserController.register)
+app.post(
+  '/meal/auth/register',
+  registerValidation,
+  handleValidationErrors,
+  UserController.register
+)
 // Other
 app.use('*', (req, res) => res.status(404).json({ error: 'route not found' }))
 
