@@ -36,6 +36,7 @@ export default class UserController {
       res.json({
         success: true,
         ...userData,
+        token,
       })
 
       //   http://localhost:4444/meal/auth/register
@@ -57,6 +58,44 @@ export default class UserController {
       res.status(500).json({
         success: false,
         msg: 'Unable to register'.error,
+      })
+    }
+  }
+
+  // Auth
+  static async getAuth(req, res) {
+    try {
+      const user = await UserModel.findById(req.userId)
+      // console.log('user', user)
+      // user {
+      //   _id: new ObjectId("63d8fc3dfb4ed0e3538c0312"),
+      //   name: '99999',
+      //   email: '99999@9999.co',
+      //   passwordHash: '$2b$10$VlUnNT3Kqas8hlCQ6Ce5q.RiUkyH7Rhs3E7jJUFWmFgoBOCZVASsK',
+      //   __v: 0
+      // }
+
+      if (!user) {
+        // if user not found
+        return res.status(404).json({
+          message: 'User not found',
+        })
+      }
+
+      // prevent return passowrd
+      const { passwordHash, ...userData } = user._doc
+
+      // if all ok:
+      res.json({
+        success: true,
+        ...userData,
+        // user,
+      })
+    } catch (error) {
+      console.log('get auth error', error)
+      res.status(500).json({
+        success: false,
+        msg: 'Unable to auth'.error,
       })
     }
   }
