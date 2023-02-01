@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 import UserController from './controllers/UserController.js'
 import checkAuth from './validation/checkAuth.js'
 import handleValidationErrors from './validation/handleValidationErrors.js'
-import { registerValidation } from './validation/validations.js'
+import { loginValidation, registerValidation } from './validation/validations.js'
 
 dotenv.config()
 
@@ -35,6 +35,12 @@ app.post(
   registerValidation,
   handleValidationErrors,
   UserController.register
+)
+app.post(
+  '/meal/auth/login',
+  loginValidation,
+  handleValidationErrors,
+  UserController.login
 )
 app.get('/meal/auth/me', checkAuth, UserController.getAuth)
 

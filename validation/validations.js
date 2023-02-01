@@ -19,3 +19,8 @@ export const registerValidation = [
   check('email', 'Email is required').isEmail(),
   check('password', 'Password is required').isLength({ min: 4 }),
 ]
+
+export const loginValidation = [
+  check('email', 'Email is required').isEmail(),
+  check('password', 'Password is required').isLength({ min: 4 }),
+]

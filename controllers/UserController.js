@@ -62,6 +62,54 @@ export default class UserController {
     }
   }
 
+  // Login
+  static async login(req, res) {
+    try {
+      const user = await UserModel.findOne({ email: req.body.email })
+
+      if (!user) {
+        console.log('User not found')
+        return res.status(404).json({
+          message: 'User not found',
+        })
+      }
+
+      // compare password?
+      const isValidPass = await bcrypt.compare(req.body.password, user._doc.passwordHash)
+
+      if (!isValidPass) {
+        console.log('Incorrect login or password')
+        return res.status(404).json({
+          message: 'Incorrect login or password',
+        })
+      }
+
+      // encrypt password? / new token?
+      const token = jwt.sign(
+        {
+          _id: user._id,
+        },
+        'secret123',
+        {
+          expiresIn: '30d',
+        }
+      )
+
+      // prevent password return
+      const { passwordHash, ...userData } = user._doc
+
+      res.json({
+        success: true,
+        // userData,
+        ...userData,
+        token,
+      })
+      console.log('login success')
+    } catch (error) {
+      console.log('login error', error)
+    }
+  }
+
   // Auth
   static async getAuth(req, res) {
     try {
