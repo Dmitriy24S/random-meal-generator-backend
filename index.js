@@ -2,6 +2,7 @@ import cors from 'cors'
 import * as dotenv from 'dotenv'
 import express from 'express'
 import mongoose from 'mongoose'
+import BookmarksController from './controllers/BookmarksController.js'
 import UserController from './controllers/UserController.js'
 import checkAuth from './validation/checkAuth.js'
 import handleValidationErrors from './validation/handleValidationErrors.js'
@@ -43,6 +44,9 @@ app.post(
   UserController.login
 )
 app.get('/meal/auth/me', checkAuth, UserController.getAuth)
+
+// Bookmarks - Add, Remove. Get
+app.post('/meal/bookmarks/add', checkAuth, BookmarksController.addBookmark)
 
 // Other
 app.use('*', (req, res) => res.status(404).json({ error: 'route not found' }))
