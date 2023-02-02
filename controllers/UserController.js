@@ -143,7 +143,8 @@ export default class UserController {
       console.log('get auth error', error)
       res.status(500).json({
         success: false,
-        msg: 'Unable to auth'.error,
+        msg: 'Unable to auth',
+        error,
       })
     }
   }
