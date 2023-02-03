@@ -82,4 +82,52 @@ export default class BookmarksController {
       })
     }
   }
+
+  static async removeBookmark(req, res) {
+    try {
+      const bookmarkId = req.params.id
+      console.log('remove bookmarkd idMeal?:', bookmarkId)
+      // const deletedBookmark = await BookmarkModel.findOneAndDelete({ _id: bookmarkId, user: req.userId })
+      BookmarkModel.findOneAndDelete(
+        // { _id: bookmarkId, user: req.userId },
+        // ! not doc id, but api item id?
+        { idMeal: bookmarkId, user: req.userId },
+        (error, doc) => {
+          // actions to take:
+
+          // if error
+          if (error) {
+            console.log(err)
+            return res.status(500).json({
+              message: 'Failed to delete bookmark',
+            })
+          }
+
+          // check for undefined? -> return error
+          if (!doc) {
+            console.log(err)
+            return res.status(500).json({
+              message: 'Bookmark not found',
+            })
+          }
+
+          console.log('bookmark delete doc:', doc)
+
+          // if all ok:
+          res.json({
+            success: true,
+            message: 'Bookmark deleted',
+            id: bookmarkId,
+          })
+        }
+      )
+    } catch (error) {
+      console.log('remove bookmark - error', error)
+      res.status(500).json({
+        success: false,
+        message: 'Unable to remove bookmark',
+        error,
+      })
+    }
+  }
 }
