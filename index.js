@@ -47,6 +47,7 @@ app.get('/meal/auth/me', checkAuth, UserController.getAuth)
 
 // Bookmarks - Add, Remove. Get
 app.post('/meal/bookmarks/add', checkAuth, BookmarksController.addBookmark)
+app.get('/meal/bookmarks/get', checkAuth, BookmarksController.getBookmarks)
 
 // Other
 app.use('*', (req, res) => res.status(404).json({ error: 'route not found' }))
